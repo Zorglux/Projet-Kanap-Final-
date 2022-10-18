@@ -250,8 +250,9 @@
   const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
   ecouteFormulaire[0].addEventListener("submit", function(e){
    
-  
-       { const body = {
+  const nombreArticles = document.getElementById("totalQuantity")
+
+        const body = {
           contact: {
             firstName : prenom.value,
             lastName : nom.value,
@@ -262,7 +263,9 @@
           products : idProduits
           };
         
-          
+if (nombreArticles.innerText == 0 || nombreArticles.innerText == ""){
+  return
+}else{ 
     fetch("http://localhost:3000/api/products/order", {
       method : "POST",
       headers : {"Content-type": "application/json" },
@@ -271,10 +274,11 @@
       .then((res) => res.json())
       .then((promise) => recupereIdCommande(promise.orderId))
        }
+      
       }
    )
   }
-  
+
   
   function recupereIdCommande(idCommande){
     window.location.href = "http://127.0.0.1:5500/html/confirmation.html?id="+idCommande
