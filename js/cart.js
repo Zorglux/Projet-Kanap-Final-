@@ -38,6 +38,7 @@
   }
   // ==========================================================
   
+
   /* utilises toute les informations pour placer les éléments
     du localStorage sur la page */ 
   async function creerElements(){
@@ -91,7 +92,7 @@
         let idLocal = [];
         let index;
   
-        // gestion erreur
+        // ====================
         if (q.target.value <= 0)
           return -1;
   
@@ -147,7 +148,6 @@
   const ville = document.getElementById("city")
   const addresse = document.getElementById("address")
   const email = document.getElementById("email")
-  
   
   const error = document.getElementById("firstNameErrorMsg")
   const errorNom = document.getElementById("lastNameErrorMsg")
@@ -263,7 +263,7 @@
           products : idProduits
           };
         
-if (nombreArticles.innerText == 0 || nombreArticles.innerText == ""){
+if (nombreArticles.innerText = 0 || nombreArticles.innerText == ""){
   return
 }else{ 
     fetch("http://localhost:3000/api/products/order", {
@@ -282,6 +282,7 @@ if (nombreArticles.innerText == 0 || nombreArticles.innerText == ""){
   
   function recupereIdCommande(idCommande){
     window.location.href = "http://127.0.0.1:5500/html/confirmation.html?id="+idCommande
+    console.log(idCommande)
   }
   
   
