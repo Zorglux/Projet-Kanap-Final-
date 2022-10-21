@@ -85,31 +85,7 @@
         actualisationLocalStorage(e, localObjet[i].id, localObjet[i].color);
       });
       
-      /* recalcule les montants a chaque changement de l'input. */ 
-      async function actualisationLocalStorage(q, id, color) {
-        let local = rameneLocalStorage();
-        let idLocal = [];
-        let index;
-  
-        // ====================
-        if (q.target.value <= 0)
-          return -1;
-  
-        // ----- On mets l'index dans notre tableau ----- //
-        for (let i = 0; local[i]; i++) {
-          if (local[i].id == id && local[i].color == color)
-            index = i;
-          idLocal.push(local[i].id);
-        }
       
-   /*   change les montants pour les remettre dans le localStorage */
-        local[index].montant = parseInt(q.target.value);
-        localStorage.setItem("panier", JSON.stringify(local));
-  
-        // ----- On remets a jour le total ----- //
-  
-                actualisationQuantitee()
-              }
               
            /* supprime l'élément du localStorage et du dom au clic */ 
               function suppression(){
@@ -134,7 +110,33 @@
        }
   }
   
-  
+/* ============================================================ */ 
+
+  /* recalcule les montants a chaque changement de l'input. */ 
+async function actualisationLocalStorage(q, id, color) {
+  let local = rameneLocalStorage();
+  let index;
+
+// empêche les valeurs négatives dans l'input. 
+  if (q.target.value <= 0)
+    return 0;
+
+// ----- On mets l'index dans notre tableau ----- //
+  for (let i = 0; local[i]; i++) {
+    if (local[i].id == id && local[i].color == color)
+      index = i;
+  }
+
+//   change les montants pour les remettre dans le localStorage
+  local[index].montant = parseInt(q.target.value);
+  localStorage.setItem("panier", JSON.stringify(local));
+
+// ----- On remets a jour le total ----- //
+
+          actualisationQuantitee()
+        }
+
+
   // ==============================================================
   /* VALIDATION DU FORMULAIRE */ 
   
@@ -201,7 +203,7 @@
     // validation addresse 
        
       if ((addresse.value) === ""){
-        e.preventDefault
+        e.preventDefault()
         errorAddresse.innerText = "Renseignez votre addresse"
       } else {
         errorAddresse.innerText = ""
@@ -210,7 +212,7 @@
     // validation email
   
       if (regexEmail.test(email.value) === false){
-        e.preventDefault
+        e.preventDefault()
         errorEmail.innerText = "Renseignez votre email"
       } else {
         errorEmail.innerText = ""
