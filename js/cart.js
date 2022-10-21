@@ -1,25 +1,26 @@
-/* récolte les informations de l'api en fonction d'un ID. 
-  (informations d'un seul produit a chaque fois ) */ 
-  async function apiParId(id) {
-    let url = `http://localhost:3000/api/products/${id}`
+/* récolte les informations de l'api en fonction d'un ID.  */
 
-    try {
-      let res = await fetch(url);
-      return await res.json();
-    } catch (error) {
+async function apiParId(id) {
+  let url = `http://localhost:3000/api/products/${id}`
+
+  try {
+    let res = await fetch(url);
+    return await res.json();
+  } catch (error) {
       console.error(error);
     }
-  }
+}
   
+
   /* ramène les éléments de mon localStorage */ 
-  function rameneLocalStorage() {
+
+function rameneLocalStorage() {
     return JSON.parse(localStorage.getItem("panier"));
-  }
+}
   
   
-  /* recalcule le montant et le prix total pour l'afficher sur le 
-     récapitulatif du panier */ 
-  async function actualisationQuantitee() {
+  /* calcule le montant et le prix pour l'afficher sur le dom */ 
+async function actualisationQuantitee() {
     let localStorage = rameneLocalStorage();
     let prix = 0;
     let quantitee = 0;
@@ -34,51 +35,49 @@
     // On les ajoutes au dom 
     document.getElementById('totalPrice').textContent = `${prix}`
     document.getElementById('totalQuantity').textContent = `${quantitee}`
-  }
-  // ==========================================================
+}
+// ==========================================================
   
 
-  /* utilises toute les informations pour placer les éléments
-    du localStorage sur la page */ 
-  async function creerElements(){
-    let localObjet = rameneLocalStorage()
-  
-    // creation des élements
+/* place les éléments sur la page */ 
+async function creerElements(){
+
+  let localObjet = rameneLocalStorage()
+  // creation des élements
+  for (let i=0; localObjet[i]; i++){
+    let donneesApi = await apiParId(localObjet[i].identifiant)
+    const placement = document.getElementById("cart__items")
     
-    for (let i=0; localObjet[i]; i++){
-      let donneesApi = await apiParId(localObjet[i].identifiant)
-      const placement = document.getElementById("cart__items")
-    
-      const article = document.createElement("article")
-      article.classList.add("cart__item")
-      article.setAttribute("data-id", `${localObjet[i].id}`)
-      article.setAttribute("data-color", `${localObjet[i].couleur}`)
-      article.innerHTML =
+    const article = document.createElement("article")
+    article.classList.add("cart__item")
+    article.setAttribute("data-id", `${localObjet[i].id}`)
+    article.setAttribute("data-color", `${localObjet[i].couleur}`)
+    article.innerHTML =
        ` <div class="cart__item__img">
-       <img src="${donneesApi.imageUrl}" alt="${donneesApi.altTxt}">
-     </div>
-     <div class="cart__item__content">
-       <div class="cart__item__content__description">
-         <h2>${donneesApi.name}</h2>
-         <p>${localObjet[i].couleur}</p>
-         <p>${donneesApi.price}</p>
-       </div>
-       <div class="cart__item__content__settings">
-         <div class="cart__item__content__settings__quantity">
-           <p>Qté : </p>
-           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${localObjet[i].montant}">
+           <img src="${donneesApi.imageUrl}" alt="${donneesApi.altTxt}">
          </div>
-         <div class="cart__item__content__settings__delete">
-           <p class="deleteItem">Supprimer</p>
-         </div>
-       </div>
-     </div>`
+         <div class="cart__item__content">
+           <div class="cart__item__content__description">
+             <h2>${donneesApi.name}</h2>
+             <p>${localObjet[i].couleur}</p>
+             <p>${donneesApi.price}</p>
+           </div>
+         <div class="cart__item__content__settings">
+           <div class="cart__item__content__settings__quantity">
+             <p>Qté : </p>
+             <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${localObjet[i].montant}">
+           </div>
+             <div class="cart__item__content__settings__delete">
+               <p class="deleteItem">Supprimer</p>
+           </div>
+          </div>
+         </div>`
   
-      placement.appendChild(article)
+    placement.appendChild(article)
   
-  // =================================================================
-  /* Calcul du prix et du nombre d'articles total */ 
-  //==================================================================
+// =================================================================
+/* Calcul du prix et du nombre d'articles total */ 
+//==================================================================
       let placementInput = article.getElementsByClassName('itemQuantity');
   
       placementInput[0].addEventListener('change', (e) => {
@@ -87,13 +86,13 @@
       
       
               
-           /* supprime l'élément du localStorage et du dom au clic */ 
-              function suppression(){
-                let boutonSupprimer =  article.getElementsByClassName("deleteItem")
-                let idParBouton = boutonSupprimer[0].closest("article").getAttribute("data-id")
-                let articleDuBouton = boutonSupprimer[0].closest("article")
+          /* supprime l'élément du localStorage et du dom au clic */ 
+            function suppression(){
+              let boutonSupprimer =  article.getElementsByClassName("deleteItem")
+              let idParBouton = boutonSupprimer[0].closest("article").getAttribute("data-id")
+              let articleDuBouton = boutonSupprimer[0].closest("article")
                 
-                boutonSupprimer[0].addEventListener("click", function(){
+              boutonSupprimer[0].addEventListener("click", function(){
                   let local = rameneLocalStorage();
                  
                   let localSupprime =  local.filter(function(local) {
@@ -107,8 +106,8 @@
                 })
               }
               suppression()    
-       }
-  }
+      }
+}
   
 /* ============================================================ */ 
 
@@ -134,13 +133,13 @@ async function actualisationLocalStorage(q, id, color) {
 // ----- On remets a jour le total ----- //
 
           actualisationQuantitee()
-        }
+}
 
+// ==============================================================
 
-  // ==============================================================
-  /* VALIDATION DU FORMULAIRE */ 
+/* VALIDATION DU FORMULAIRE */ 
   
-  function validationFormulaire(){
+function validationFormulaire(){
   
   const bouton = document.getElementById("order")
   
@@ -158,74 +157,76 @@ async function actualisationLocalStorage(q, id, color) {
   
   const regexAlphabet = /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/;
   const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
   // =================================================
    bouton.addEventListener("click", function(e){
   
-  const articlesTotaux = document.getElementById("totalQuantity")
+      const articlesTotaux = document.getElementById("totalQuantity")
   
-     // regarde si il y a un produit dans le panier
+      // regarde si il y a un produit dans le panier
   
-     if (articlesTotaux.innerText === "" || articlesTotaux.innerText == 0){
-      e.preventDefault()
-      alert("Veuillez mettre un produit dans votre panier")
-     }
+      if (articlesTotaux.innerText === "" || articlesTotaux.innerText == 0){
+        e.preventDefault()
+        alert("Veuillez mettre un produit dans votre panier")
+      }
   
   
-     // validation prénom 
+      // validation prénom 
   
-       if ((regexAlphabet.test(prenom.value) === false) || ((prenom.value) === "")){
+      if ((regexAlphabet.test(prenom.value) === false) || ((prenom.value) === "")){
         e.preventDefault()
         error.innerText = "Renseignez votre prénom"
-       }else{
+      }else{
         error.innerText = ""
-       }
+      }
   
   
-    // validation nom
+      // validation nom
   
-       if ((regexAlphabet.test(nom.value) === false) || (nom.value) === ""){
+      if ((regexAlphabet.test(nom.value) === false) || (nom.value) === ""){
         e.preventDefault()
         errorNom.innerText = "Renseignez votre nom"
-       }else{
+      }else{
         errorNom.innerText = ""
-       }
+      }
   
   
-    // validation ville
+      // validation ville
   
-       if ((regexAlphabet.test(ville.value) === false) || (ville.value) === ""){
+      if ((regexAlphabet.test(ville.value) === false) || (ville.value) === ""){
         e.preventDefault()
         errorVille.innerText = "Renseignez votre Ville"
-       }else{
+      }else{
         errorVille.innerText = ""
-       }
+      }
   
-    // validation addresse 
+      // validation addresse 
        
       if ((addresse.value) === ""){
         e.preventDefault()
         errorAddresse.innerText = "Renseignez votre addresse"
-      } else {
+      }else {
         errorAddresse.innerText = ""
       }
   
-    // validation email
+      // validation email
   
       if (regexEmail.test(email.value) === false){
         e.preventDefault()
         errorEmail.innerText = "Renseignez votre email"
-      } else {
+      }else {
         errorEmail.innerText = ""
       }
    })
-  }
-  // ================================================
+}
+
+// ================================================
   
 
   
   //  Requête POST pour envoyer les données a l'API
   
-  function envoiApi(){
+function envoiApi(){
   const prenom = document.getElementById("firstName")
   const nom = document.getElementById("lastName")
   const addresse = document.getElementById("address")
@@ -243,18 +244,16 @@ async function actualisationLocalStorage(q, id, color) {
       idProduits.push(produitsLocal[i].identifiant)
     }
     
-
-
-        const body = {
-          contact: {
-            firstName : prenom.value,
-            lastName : nom.value,
-            address : addresse.value,
-            city : ville.value,
-            email : email.value
-          },
-          products : idProduits
-          };
+    const body = {
+      contact: {
+        firstName : prenom.value,
+        lastName : nom.value,
+        address : addresse.value,
+        city : ville.value,
+        email : email.value
+      },
+      products : idProduits
+    };
         
 
     fetch("http://localhost:3000/api/products/order", {
@@ -264,16 +263,18 @@ async function actualisationLocalStorage(q, id, color) {
     })
       .then((res) => res.json())
       .then((promise) => recupereIdCommande(promise.orderId))
-      })
-  }
+  })
+}
 
   
-  function recupereIdCommande(idCommande){
-    window.location.href = "http://127.0.0.1:5500/html/confirmation.html?id="+idCommande
-  }
+function recupereIdCommande(idCommande){
+  window.location.href = "http://127.0.0.1:5500/html/confirmation.html?id="+idCommande
+}
   
   
-  // j'appelle mes fonctions 
+
+
+// j'appelle mes fonctions 
   creerElements()
   actualisationQuantitee()
   validationFormulaire()

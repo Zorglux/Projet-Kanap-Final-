@@ -3,28 +3,26 @@
 function recupereIdDeCommande(){
     const url = new URLSearchParams(window.location.search)
     return idDeCommande = url.get("id")
+    }   
+    
+
+/* récupère l'id pour le placer dans le DOM */  
+
+function placeIdDeCommande(){
+    const id = recupereIdDeCommande()
+    const placement = document.getElementById("orderId")
+    placement.innerText = id
+    
+    videLocalStorage()
     }
-    // ===========================================================
+       
+
+/* vide le localStorage */ 
     
-    
-    /* récupère l'id pour le placer dans le DOM */  
-    function placeIdDeCommande(){
-      const id = recupereIdDeCommande()
-      const placement = document.getElementById("orderId")
-      placement.innerText = id
-    
-      videLocalStorage()
-    }
-    // ============================================================ 
+function videLocalStorage(){
+  localStorage.clear()
+}
     
     
     
-    /* vide le localStorage */ 
-    
-    function videLocalStorage(){
-        localStorage.clear()
-    }
-    // =============================================================
-    
-    
-    placeIdDeCommande()
+placeIdDeCommande()
