@@ -1,4 +1,4 @@
-let url = "http://localhost:3000/api/products"
+const url = "http://localhost:3000/api/products"
 
 fetch(url)
 .then((res) => res.json())
@@ -7,8 +7,8 @@ fetch(url)
 
 
 
-/* placement() se sert du fetch pour placer les 
-   élements sur la page */ 
+// PLACE LES ELEMENTS UN PAR UN 
+
 function placement(donnees){
   document.getElementById("items").innerHTML = 
   donnees.map(canape => 

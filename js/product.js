@@ -1,14 +1,16 @@
 const futurId = new URLSearchParams(window.location.search)
 const id = futurId.get("id")
 const urlDeBase ="http://localhost:3000/api/products/"
+
 /* ===================================================== */ 
 fetch(urlDeBase+id)
 .then ((response) => response.json())
 .then ((donnees)  =>  creation(donnees))
 /* ===================================================== */ 
 
-/* creation() ramène les info dont j'ai besoin
-   pour afficher l'élément sur la page    */
+
+// CREATION DE L'ELEMENT SUR LE DOM 
+
 function creation(donneesCanape){
  const nom = donneesCanape.name
  const imageUrl = donneesCanape.imageUrl
@@ -61,6 +63,7 @@ function creationCouleurs(couleurs){
     input.appendChild(option)
     })
 }
+
 /* ========================================================== */ 
  //  MISE EN PLACE DU LOCALSTORAGE 
 /* ========================================================== */
@@ -87,6 +90,7 @@ bouton.addEventListener("click", function(event){
    }
 })
 
+
 /* ============================================================= */ 
 // FONCTIONS QUE J'APPELLE POUR MON LOCALSTORAGE
 /* ============================================================= */
@@ -111,9 +115,12 @@ function rameneDuPanier(){
 function ajouterAuPanier(produit){
 
  let panier = rameneDuPanier()
+    
+
+ 
  const nombreCanapeString  = document.getElementById("quantity").value
  const nombreCanape = parseInt(nombreCanapeString)
-
+ 
  let produitDansPanier = panier.find(p => produit.id == p.id)
  if (produitDansPanier != undefined){
     produitDansPanier.montant += nombreCanape

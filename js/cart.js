@@ -2,7 +2,7 @@
   (informations d'un seul produit a chaque fois ) */ 
   async function apiParId(id) {
     let url = `http://localhost:3000/api/products/${id}`
-  
+
     try {
       let res = await fetch(url);
       return await res.json();
@@ -10,7 +10,6 @@
       console.error(error);
     }
   }
-  
   
   /* ramène les éléments de mon localStorage */ 
   function rameneLocalStorage() {
@@ -104,7 +103,7 @@
         }
       
    /*   change les montants pour les remettre dans le localStorage */
-        local[index].montant = q.target.value;
+        local[index].montant = parseInt(q.target.value);
         localStorage.setItem("panier", JSON.stringify(local));
   
         // ----- On remets a jour le total ----- //
@@ -220,10 +219,7 @@
   }
   // ================================================
   
-  
-  
-  
-  /* ======================================= */ 
+
   
   //  Requête POST pour envoyer les données a l'API
   
@@ -235,22 +231,17 @@
   const email = document.getElementById("email")
   
   
-  const produitsLocal = rameneLocalStorage()
-  let idProduits = []
-  
-  for (let i=0; produitsLocal[i]; i++){
-    idProduits.push(produitsLocal[i].identifiant)
-  }
-  
-  
-  
-  
-  
-  
   const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
   ecouteFormulaire[0].addEventListener("submit", function(e){
-   
-  const nombreArticles = document.getElementById("totalQuantity")
+    e.preventDefault()
+    const produitsLocal = rameneLocalStorage()
+    let idProduits = []
+    
+    for (let i=0; produitsLocal[i]; i++){
+      idProduits.push(produitsLocal[i].identifiant)
+    }
+    
+
 
         const body = {
           contact: {
@@ -263,9 +254,7 @@
           products : idProduits
           };
         
-if (nombreArticles.innerText = 0 || nombreArticles.innerText == ""){
-  return
-}else{ 
+
     fetch("http://localhost:3000/api/products/order", {
       method : "POST",
       headers : {"Content-type": "application/json" },
@@ -273,16 +262,12 @@ if (nombreArticles.innerText = 0 || nombreArticles.innerText == ""){
     })
       .then((res) => res.json())
       .then((promise) => recupereIdCommande(promise.orderId))
-       }
-      
-      }
-   )
+      })
   }
 
   
   function recupereIdCommande(idCommande){
     window.location.href = "http://127.0.0.1:5500/html/confirmation.html?id="+idCommande
-    console.log(idCommande)
   }
   
   
