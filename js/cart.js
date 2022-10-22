@@ -1,5 +1,4 @@
 /* récolte les informations de l'api en fonction d'un ID.  */
-
 async function apiParId(id) {
   let url = `http://localhost:3000/api/products/${id}`
 
@@ -12,14 +11,13 @@ async function apiParId(id) {
 }
   
 
-  /* ramène les éléments de mon localStorage */ 
-
+/* ramène les éléments de mon localStorage */ 
 function rameneLocalStorage() {
     return JSON.parse(localStorage.getItem("panier"));
 }
   
   
-  /* calcule le montant et le prix pour l'afficher sur le dom */ 
+/* calcule le montant et le prix pour l'afficher sur le dom */ 
 async function actualisationQuantitee() {
     let localStorage = rameneLocalStorage();
     let prix = 0;
@@ -43,7 +41,6 @@ async function actualisationQuantitee() {
 async function creerElements(){
 
   let localObjet = rameneLocalStorage()
-  // creation des élements
   for (let i=0; localObjet[i]; i++){
     let donneesApi = await apiParId(localObjet[i].identifiant)
     const placement = document.getElementById("cart__items")
@@ -76,7 +73,7 @@ async function creerElements(){
     placement.appendChild(article)
   
 // =================================================================
-/* Calcul du prix et du nombre d'articles total */ 
+/* Gestion de quantitée dans le localStorage */ 
 //==================================================================
       let placementInput = article.getElementsByClassName('itemQuantity');
   
@@ -111,7 +108,7 @@ async function creerElements(){
   
 /* ============================================================ */ 
 
-  /* recalcule les montants a chaque changement de l'input. */ 
+  /* mets a jour le localStorage. */ 
 async function actualisationLocalStorage(q, id, color) {
   let local = rameneLocalStorage();
   let index;
@@ -130,14 +127,14 @@ async function actualisationLocalStorage(q, id, color) {
   local[index].montant = parseInt(q.target.value);
   localStorage.setItem("panier", JSON.stringify(local));
 
-// ----- On remets a jour le total ----- //
+
 
           actualisationQuantitee()
 }
 
 // ==============================================================
 
-/* VALIDATION DU FORMULAIRE */ 
+/* VALIDATION DES DONNEES DU FORMULAIRE */ 
   
 function validationFormulaire(){
   
@@ -158,13 +155,12 @@ function validationFormulaire(){
   const regexAlphabet = /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/;
   const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  // =================================================
+  // ===========================================================
    bouton.addEventListener("click", function(e){
   
       const articlesTotaux = document.getElementById("totalQuantity")
   
       // regarde si il y a un produit dans le panier
-  
       if (articlesTotaux.innerText === "" || articlesTotaux.innerText == 0){
         e.preventDefault()
         alert("Veuillez mettre un produit dans votre panier")
@@ -172,7 +168,6 @@ function validationFormulaire(){
   
   
       // validation prénom 
-  
       if ((regexAlphabet.test(prenom.value) === false) || ((prenom.value) === "")){
         e.preventDefault()
         error.innerText = "Renseignez votre prénom"
@@ -182,7 +177,6 @@ function validationFormulaire(){
   
   
       // validation nom
-  
       if ((regexAlphabet.test(nom.value) === false) || (nom.value) === ""){
         e.preventDefault()
         errorNom.innerText = "Renseignez votre nom"
@@ -192,7 +186,6 @@ function validationFormulaire(){
   
   
       // validation ville
-  
       if ((regexAlphabet.test(ville.value) === false) || (ville.value) === ""){
         e.preventDefault()
         errorVille.innerText = "Renseignez votre Ville"
@@ -201,7 +194,6 @@ function validationFormulaire(){
       }
   
       // validation addresse 
-       
       if ((addresse.value) === ""){
         e.preventDefault()
         errorAddresse.innerText = "Renseignez votre addresse"
@@ -210,7 +202,6 @@ function validationFormulaire(){
       }
   
       // validation email
-  
       if (regexEmail.test(email.value) === false){
         e.preventDefault()
         errorEmail.innerText = "Renseignez votre email"
@@ -266,7 +257,7 @@ function envoiApi(){
   })
 }
 
-  
+/* récupère la réponse de l'api pour rediriger l'utilisateur */ 
 function recupereIdCommande(idCommande){
   window.location.href = "http://127.0.0.1:5500/html/confirmation.html?id="+idCommande
 }

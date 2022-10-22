@@ -69,7 +69,7 @@ function creationCouleurs(couleurs){
 /* ========================================================== */
 
 
-// J'écoute le bouton "Ajouter au panier"
+// Prépare le LocalStorage et vérifie les données
 
 const bouton = document.getElementById("addToCart")
 bouton.addEventListener("click", function(event){
